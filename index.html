@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баярын Мэндчилгээ ✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { background-color: #080808; color: white; font-family: sans-serif; overflow: hidden; }
+        .page { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; z-index: 10; }
+        .active { display: flex; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .card-gold { border: 8px double #d4af37; background: #fdf8ee; color: #4a3728; }
+        .photo-frame { border: 10px solid white; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+
+        /* Борооны эффект */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="tu 1.mp3" loop></audio>
+
+    <div id="particles-js"></div>
+
+    <div id="step0" class="page active animate__animated animate__fadeIn">
+        <div onclick="openEnvelope()" class="glass p-10 rounded-[2.5rem] text-center cursor-pointer hover:scale-105 transition-all shadow-2xl">
+            <div class="text-7xl mb-4 animate-bounce">💌</div>
+            <h1 class="text-xl font-bold tracking-widest uppercase text-yellow-500">хайрт дүүгээс нь</h1>
+            <p class="text-gray-500 mt-2 italic text-sm">Нээхийн тулд дарна уу</p>
+        </div>
+    </div>
+
+    <div id="step1" class="page animate__animated animate__fadeInRight">
+        <div class="card-gold p-8 max-w-sm w-full text-center rounded-sm shadow-2xl">
+            <div class="text-4xl mb-4">🎖️</div>
+            <h2 class="text-2xl font-bold border-b-2 border-[#d4af37] pb-2 mb-4 uppercase italic">Ахдаа</h2>
+            <p class="italic leading-relaxed text-sm mb-6">
+                "Цэргийн баярын мэнд хүргэе"
+            </p>
+            <button onclick="nextStep(2)" class="bg-[#d4af37] text-white px-8 py-2 rounded-full font-bold shadow-lg">Үргэлжлүүлэх ➔</button>
+        </div>
+    </div>
+
+    <div id="step2" class="page animate__animated animate__fadeInRight">
+        <h2 class="text-yellow-500 mb-6 font-bold uppercase tracking-tighter">Дурсамж бүхэн үнэ цэнэтэй ✨</h2>
+        <div class="relative w-full max-w-xs">
+            <div class="photo-frame bg-white p-1 overflow-hidden">
+                <img id="galleryImg" src="1.jpg" class="w-full h-[400px] object-cover animate__animated" alt="Memory">
+            </div>
+            <div class="flex justify-between mt-4 gap-2">
+                <button onclick="prevImage()" class="glass p-3 rounded-xl flex-1 text-sm">⬅️</button>
+                <button onclick="nextImage()" class="bg-yellow-500 text-black font-bold p-3 rounded-xl flex-1 text-sm">➡️</button>
+            </div>
+            <p class="text-center mt-3 text-gray-500 text-xs font-bold uppercase tracking-widest"><span id="imgNumber">1</span> / 5</p>
+        </div>
+        <button onclick="nextStep(3)" class="mt-8 text-gray-400 border-b border-gray-700 text-sm">Үргэлжлүүлэх ➔</button>
+    </div>
+
+    <div id="step3" class="page animate__animated animate__fadeInRight">
+        <h2 class="text-green-500 mb-6 font-bold flex items-center gap-2 uppercase italic text-sm">▶️Түшиг тулгуур минь</h2>
+        <div class="w-full max-w-sm aspect-[9/16] md:aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+            <video id="myVideo" src="hh.mp4" controls class="w-full h-full object-contain"></video>
+        </div>
+        <button onclick="nextStep(4)" class="mt-8 bg-white text-black px-10 py-3 rounded-2xl font-bold shadow-xl">Үргэлжлүүлэх ➔</button>
+    </div>
+
+    <div id="step4" class="page animate__animated animate__fadeInRight">
+        <div class="glass p-8 rounded-[2.5rem] max-w-sm w-full border border-white/5 shadow-2xl">
+            <h2 class="text-lg font-bold mb-4 text-center italic uppercase">Таньдаа хайртай шүү💬</h2>
+            <p class="text-gray-500 mb-6 text-center text-xs italic">"Бэлэг таалагдсан уу🫡"</p>
+            
+            <form action="https://formspree.io/f/mbdzpyoq" method="POST" class="space-y-4">
+                <textarea name="message" required placeholder="Сэтгэгдлээ бичээрэй..." class="w-full bg-black/50 rounded-2xl p-4 border border-white/10 focus:border-yellow-500 outline-none h-32 text-white"></textarea>
+                <button type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-black py-4 rounded-2xl font-bold">ИЛГЭЭХ ✨</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        const images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"];
+        let currentImgIndex = 0;
+
+        function updateImage() {
+            const imgElement = document.getElementById('galleryImg');
+            imgElement.classList.remove('animate__fadeIn');
+            void imgElement.offsetWidth; 
+            imgElement.classList.add('animate__fadeIn');
+            imgElement.src = images[currentImgIndex];
+            document.getElementById('imgNumber').innerText = currentImgIndex + 1;
+        }
+
+        function nextImage() { currentImgIndex = (currentImgIndex + 1) % images.length; updateImage(); }
+        function prevImage() { currentImgIndex = (currentImgIndex - 1 + images.length) % images.length; updateImage(); }
+
+        function openEnvelope() {
+            document.getElementById('bgMusic').play().catch(() => {});
+            document.getElementById('particles-js').style.display = 'block';
+            startRain(); 
+            nextStep(1);
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+
+        function nextStep(stepNumber) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('step' + stepNumber).classList.add('active');
+            
+            const v = document.getElementById('myVideo');
+            const bgMusic = document.getElementById('bgMusic');
+
+            if (stepNumber === 3) {
+                // Бичлэг үзэх хэсэгт арын хөгжмийг зогсооно
+                v.play();
+                bgMusic.pause();
+            } else {
+                // Бичлэгийг зогсоож, арын хөгжмийг үргэлжлүүлнэ (хэрэв эхэлсэн бол)
+                v.pause();
+                if (stepNumber > 0) {
+                    bgMusic.play().catch(() => {});
+                }
+            }
+        }
+
+        function startRain() {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 80 },
+                    "color": { "value": "#d4af37" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.5 },
+                    "size": { "value": 3 },
+                    "move": {
+                        "enable": true,
+                        "speed": 8,
+                        "direction": "bottom",
+                        "out_mode": "out"
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
